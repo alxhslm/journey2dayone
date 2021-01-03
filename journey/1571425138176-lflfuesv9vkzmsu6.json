@@ -1,0 +1,30 @@
+{
+  "mood": 5,
+  "favourite": false,
+  "date_modified": 1571425361000,
+  "sentiment": 1.25,
+  "tags": [],
+  "folder": "",
+  "type": "html",
+  "address": "London road, Croydon",
+  "label": "",
+  "date_journal": 1571386059000,
+  "photos": [
+    "1571425138176-lflfuesv9vkzmsu6-ykqsoau0grrkdlr0.jpeg"
+  ],
+  "lon": -0.104888,
+  "weather": {
+    "degree_c": 9.4000000000000004,
+    "description": "Overcast clouds",
+    "place": "Croydon",
+    "icon": "03n",
+    "id": -1
+  },
+  "lat": 51.379372,
+  "id": "1571425138176-lflfuesv9vkzmsu6",
+  "timezone": "Europe\/London",
+  "music_artist": "",
+  "text": "<p dir=\"auto\">Rode my new bike for the first time!&nbsp;<\/p>\n<p dir=\"auto\"><\/p>\n<p dir=\"auto\">I think the bike looks pretty damn good, with the <em>very dark grey<\/em>!<\/p>\n<p dir=\"auto\"><\/p>",
+  "music_title": "",
+  "preview_text": "<p dir=\"auto\">Rode my new bike for the first time!&nbsp;<\/p>\n<p dir=\"auto\"><\/p>\n<p dir=\"auto\">I think the "
+}

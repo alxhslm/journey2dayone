@@ -1,0 +1,37 @@
+{
+    "metadata": {
+        "version": "1.0"
+    },
+    "entries": [
+        {
+            "creationOSName": "macOS",
+            "creationOSVersion": "11.0.1",
+            "creationDevice": "Alex's MacBook Pro",
+            "creationDeviceType": "MacBook Pro",
+            "creationDate": "2019-10-18T08:07:39Z",
+            "timeZone": "Europe\/London",
+            "starred": false,
+            "uuid": "F07F0D7938334C75A8E4D55144F7AB28",
+            "text": "Rode my new bike for the first time! \n\n  I think the bike looks pretty damn good, with the *very dark grey*!\n![](dayone-moment:\/\/E26AF65498CA4349A5A8277827706602)",
+            "location": {
+                "longitude": -0.104888,
+                "latitude": 51.379372,
+                "placeName": "London road, Croydon"
+            },
+            "weather": {
+                "temperatureCelsius": 9.4,
+                "conditionsDescription": "Overcast clouds"
+            },
+            "photos": [
+                {
+                    "orderInEntry": 0,
+                    "identifier": "E26AF65498CA4349A5A8277827706602",
+                    "type": "jpeg",
+                    "isSketch": false,
+                    "creationDevice": "Alex's MacBook Pro",
+                    "md5": "1571425138176-lflfuesv9vkzmsu6-ykqsoau0grrkdlr0"
+                }
+            ]
+        }
+    ]
+}
