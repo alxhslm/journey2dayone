@@ -20,13 +20,15 @@ def convert_unixtime(unixtime, timezone_str):
 
 
 def convert_photo(name, i):
+    md5, type = os.path.splitext(name)
+    type = type[1:] if len(type) else type
     return {
         "orderInEntry": i,
         "identifier": getuuid(),
-        "type": "jpeg",
+        "type": type,
         "isSketch": False,
         "creationDevice": "Joe's MacBook Pro",
-        "md5": os.path.splitext(name)[0],
+        "md5": md5,
     }
 
 
