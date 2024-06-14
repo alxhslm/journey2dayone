@@ -20,12 +20,11 @@ def convert_unixtime(unixtime:int, tzinfo:pytz.BaseTzInfo)->str:
 
 
 def convert_photo(name:str, i:int) -> dict[str, t.Any]:
-    md5, type = os.path.splitext(name)
-    type = type[1:] if len(type) else type
+    md5, ext = name.split(".")
     return {
         "orderInEntry": i,
         "identifier": getuuid(),
-        "type": type,
+        "type": ext,
         "isSketch": False,
         "creationDevice": "Joe's MacBook Pro",
         "md5": md5,
