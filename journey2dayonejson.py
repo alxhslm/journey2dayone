@@ -1,3 +1,5 @@
+import argparse
+import tempfile
 import typing as t
 import json
 import uuid
@@ -66,10 +68,19 @@ def journeyjson2dayonejson(journey:dict[str, t.Any])->dict[str, t.Any]:
         dayone["photos"] = [convert_photo(f, i) for i, f in enumerate(journey["photos"])]
     return dayone
 
-os.makedirs("dayone/photos", exist_ok=True)
+parser = argparse.ArgumentParser(prog="journey2dayone", description="Convert Journey zip entries to the Day One format")
+parser.add_argument("filename", help="Path to journal in Journey zip format")
+parser.add_argument("-o", "--output", default="dayone", help = "Filename of journal in Day One zip format (without extension)")
+parser.add_argument("-j", "--journal-name", default="Journey", help="Name of journal when imported into Day One")
+
+args = parser.parse_args()
+
+tempdir = tempfile.TemporaryDirectory() 
+shutil.unpack_archive(args.filename, extract_dir=tempdir.name)
+os.makedirs(os.path.join(tempdir.name, "dayone/photos"))
 
 entries = []
-for f in glob.glob("./journey/*.json"):
+for f in glob.glob(os.path.join(tempdir.name, "journey/*.json")):
     with open(f, "r") as fh:
         journey = json.load(fh)
 
@@ -77,8 +88,8 @@ for f in glob.glob("./journey/*.json"):
 
     if journey["photos"]:
         for (p, j) in zip(dayone["photos"], journey["photos"]):
-            source = "./journey/" + str(j)
-            target = "./dayone/photos/" + str(j)
+            source = os.path.join(tempdir.name, "journey", j)
+            target = os.path.join(tempdir.name, "dayone", "photos", j)
             shutil.copyfile(source, target)
 
             dayone["text"] = dayone["text"] + "\n![](dayone-moment://{})".format(p["identifier"])
@@ -86,10 +97,9 @@ for f in glob.glob("./journey/*.json"):
 
 dayone_json = {"metadata": {"version": "1.0"}, "entries": entries}
 
-with open("dayone/Journey.json", "w") as fh:
+with open(os.path.join(tempdir.name, "dayone", f"{args.journal_name}.json"), "w") as fh:
     fh.write(json.dumps(dayone_json, indent=4, separators=(",", ": ")).replace("/", r"\/"))
 
-if os.path.exists("dayone.zip"):
-    os.remove("dayone.zip")
+shutil.make_archive(os.path.join(os.path.dirname(args.filename), args.output), format="zip", root_dir=os.path.join(tempdir.name, "dayone"))
 
-shutil.make_archive("dayone", "zip", "./dayone")
+tempdir.cleanup()
