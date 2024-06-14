@@ -1,25 +1,24 @@
+import typing as t
 import json
 import uuid
 import os, glob
 from datetime import datetime
 from pytz import timezone
 from markdownify import markdownify
-from zipfile import ZipFile
 import shutil
 
-
-def getuuid():
+def getuuid() -> str:
     uu = str(uuid.uuid4())
     return uu.replace("-", "").upper()
 
 
-def convert_unixtime(unixtime, timezone_str):
+def convert_unixtime(unixtime:int, timezone_str:str)->str:
     date = datetime.fromtimestamp(unixtime / 1000)
     date = timezone(timezone_str).localize(date)
     return date.astimezone(timezone("UTC")).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def convert_photo(name, i):
+def convert_photo(name:str, i:int) -> dict[str, t.Any]:
     md5, type = os.path.splitext(name)
     type = type[1:] if len(type) else type
     return {
@@ -32,7 +31,7 @@ def convert_photo(name, i):
     }
 
 
-def journeyjson2dayonejson(journey):
+def journeyjson2dayonejson(journey:dict[str, t.Any])->dict[str, t.Any]:
     dayone = {
         "creationOSName": "macOS",
         "creationOSVersion": "10.15.7",
@@ -62,19 +61,10 @@ def journeyjson2dayonejson(journey):
         dayone["tags"] = journey["tags"]
 
     if journey["photos"]:
-        i = 0
-        dayone["photos"] = []
-        for f in journey["photos"]:
-            dayone["photos"].append(convert_photo(f, i))
-            i += 1
-
+        dayone["photos"] = [convert_photo(f, i) for i, f in enumerate(journey["photos"])]
     return dayone
 
-
-if os.path.exists("./dayone"):
-    shutil.rmtree("./dayone")
-
-os.makedirs("dayone/photos")
+os.makedirs("dayone/photos", exist_ok=True)
 
 entries = []
 for f in glob.glob("./journey/*.json"):
@@ -94,7 +84,7 @@ for f in glob.glob("./journey/*.json"):
 
 dayone_json = {"metadata": {"version": "1.0"}, "entries": entries}
 
-with open("./dayone/Journey.json", "w") as fh:
+with open("dayone/Journey.json", "w") as fh:
     fh.write(json.dumps(dayone_json, indent=4, separators=(",", ": ")).replace("/", r"\/"))
 
 if os.path.exists("dayone.zip"):
