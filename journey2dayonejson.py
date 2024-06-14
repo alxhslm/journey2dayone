@@ -3,19 +3,20 @@ import json
 import uuid
 import os, glob
 from datetime import datetime
-from pytz import timezone
 from markdownify import markdownify
 import shutil
+import pytz
+from tzlocal import get_localzone
 
 def getuuid() -> str:
     uu = str(uuid.uuid4())
     return uu.replace("-", "").upper()
 
 
-def convert_unixtime(unixtime:int, timezone_str:str)->str:
+def convert_unixtime(unixtime:int, tzinfo:pytz.BaseTzInfo)->str:
     date = datetime.fromtimestamp(unixtime / 1000)
-    date = timezone(timezone_str).localize(date)
-    return date.astimezone(timezone("UTC")).strftime("%Y-%m-%dT%H:%M:%SZ")
+    date = tzinfo.localize(date)
+    return date.astimezone(pytz.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def convert_photo(name:str, i:int) -> dict[str, t.Any]:
@@ -32,13 +33,15 @@ def convert_photo(name:str, i:int) -> dict[str, t.Any]:
 
 
 def journeyjson2dayonejson(journey:dict[str, t.Any])->dict[str, t.Any]:
+    tz = pytz.timezone(journey["timezone"]) if journey["timezone"].strip() else get_localzone()
+
     dayone = {
         "creationOSName": "macOS",
         "creationOSVersion": "10.15.7",
         "creationDevice": "Joe's MacBook Pro",
         "creationDeviceType": "MacBook Pro",
-        "creationDate": convert_unixtime(journey["date_journal"], journey["timezone"]),
-        "timeZone": journey["timezone"],
+        "creationDate": convert_unixtime(journey["date_journal"], tz),
+        "timeZone": str(tz),
         "starred": False,
         "uuid": getuuid(),
         "text": markdownify(journey["text"], strip=["div"]).strip().replace("\\n\\n", "\\n").replace("\\n  \\n", "\\n"),
