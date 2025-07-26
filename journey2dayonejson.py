@@ -76,7 +76,7 @@ parser.add_argument("-j", "--journal-name", default="Journey", help="Name of jou
 args = parser.parse_args()
 
 tempdir = tempfile.TemporaryDirectory() 
-shutil.unpack_archive(args.filename, extract_dir=tempdir.name)
+shutil.unpack_archive(args.filename, extract_dir=os.path.join(tempdir.name, "journey"))
 os.makedirs(os.path.join(tempdir.name, "dayone/photos"))
 
 entries = []
